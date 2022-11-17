@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
@@ -13,7 +12,7 @@ import (
 func main() {
 	command := os.Args[3]
 	args := os.Args[4:len(os.Args)]
-	chrootDir, err := ioutil.TempDir("", "")
+	chrootDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		fmt.Printf("error creating chroot dir: %v", err)
 		os.Exit(1)
@@ -82,6 +81,6 @@ func createDevNull(chrootDir string) error {
 	if err := os.MkdirAll(path.Join(chrootDir, "dev"), 0750); err != nil {
 		return err
 	}
-	return ioutil.WriteFile(path.Join(chrootDir, "dev", "null"), []byte{}, 0644)
+	return os.WriteFile(path.Join(chrootDir, "dev", "null"), []byte{}, 0644)
 
 }
