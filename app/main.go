@@ -36,6 +36,7 @@ func main() {
 	cmd := exec.Command(command, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+	cmd.SysProcAttr = &syscall.SysProcAttr{Cloneflags: syscall.CLONE_NEWPID}
 
 	err = cmd.Run()
 
@@ -81,6 +82,6 @@ func createDevNull(chrootDir string) error {
 	if err := os.MkdirAll(path.Join(chrootDir, "dev"), 0750); err != nil {
 		return err
 	}
-	return os.WriteFile(path.Join(chrootDir, "dev", "null"), []byte{}, 0644)
+	return ioutil.WriteFile(path.Join(chrootDir, "dev", "null"), []byte{}, 0644)
 
 }
